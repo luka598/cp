@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+PS4="\033[0;33m>>>\033[0m "; set -x
+
+input_file="main.cpp"
+output_file=$(echo $input_file | sed "s/\.cpp//")
+flags="-fdiagnostics-color=always -std=c++17 -O2 -Wall"
+g++ $flags -o $output_file $input_file
+
+IFS=$'\n'
+for entry in $(ls io)
+do
+	if [[ $entry == input* ]]; then
+		cat io/$entry | ./$output_file
+	fi
+done
